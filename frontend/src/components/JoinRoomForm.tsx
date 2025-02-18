@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 type JoinRoomFormProps = {
     participantName: string;
     setParticipantName: (name: string) => void;
@@ -13,9 +15,17 @@ function JoinRoomForm({
     setRoomName,
     joinRoom,
 }: JoinRoomFormProps) {
+    const navigate = useNavigate();
+
+    const handleBackToHomepage = () => {
+        navigate('/');
+    };
+
+    const isDarkMode = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+
     return (
-        <div id="join">
-            <div id="join-dialog">
+        <div id="join" className={`text-center mt-5 ${isDarkMode ? 'bg-dark text-light' : 'bg-light'}`}>
+            <div id="join-dialog" className={`p-4 rounded shadow ${isDarkMode ? 'bg-dark' : 'bg-light'}`}>
                 <h2>Join a Video Room</h2>
                 <form
                     onSubmit={(e) => {
@@ -23,8 +33,8 @@ function JoinRoomForm({
                         e.preventDefault();
                     }}
                 >
-                    <div>
-                        <label htmlFor="participant-name">Participant</label>
+                    <div className="mb-3 text-start">
+                        <label htmlFor="participant-name" className="form-label">Participant</label>
                         <input
                             id="participant-name"
                             className="form-control"
@@ -34,8 +44,8 @@ function JoinRoomForm({
                             required
                         />
                     </div>
-                    <div>
-                        <label htmlFor="room-name">Room</label>
+                    <div className="mb-3 text-start">
+                        <label htmlFor="room-name" className="form-label">Room</label>
                         <input
                             id="room-name"
                             className="form-control"
@@ -46,11 +56,18 @@ function JoinRoomForm({
                         />
                     </div>
                     <button
-                        className="btn btn-lg btn-success"
+                        className="btn btn-lg btn-success me-2"
                         type="submit"
                         disabled={!roomName || !participantName}
                     >
                         Join!
+                    </button>
+                    <button
+                        className="btn btn-secondary btn-lg"
+                        type="button"
+                        onClick={handleBackToHomepage}
+                    >
+                        Back to Homepage
                     </button>
                 </form>
             </div>
