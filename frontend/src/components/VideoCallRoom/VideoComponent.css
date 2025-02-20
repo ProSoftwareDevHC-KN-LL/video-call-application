@@ -1,4 +1,5 @@
 .video-grid {
+    padding: 50px;
     display: grid; /* Use grid layout */
     grid-template-columns: repeat(2, 1fr); /* Two columns */
     gap: 15px; /* Space between video components */
@@ -9,7 +10,7 @@
 .video-container {
     position: relative;
     width: 100%; /* Full width */
-    height: 200px; /* Set a fixed height for the video */
+    height: 100%; /* Set a fixed height for the video */
     border: 2px solid #4CAF50; /* Green border for video */
     border-radius: 8px; /* Rounded corners */
     overflow: hidden; /* Hide overflow */
@@ -37,6 +38,7 @@
 
 /* Centering the last participant in an odd-numbered row */
 .video-grid > :nth-child(odd):last-child {
+    width: 50%;
     grid-column: 1 / -1; /* Span across both columns */
     justify-self: center; /* Center the participant */
 }
