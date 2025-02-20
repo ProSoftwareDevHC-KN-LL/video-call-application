@@ -3,25 +3,47 @@ import { LocalVideoTrack } from 'livekit-client';
 import VideoComponent from './VideoCallRoom/VideoComponent';
 
 function DebugVideoComponent() {
-    const [track, setTrack] = useState<LocalVideoTrack | null>(null);
-    const participantIdentity = "Test Participant"; // Example identity
+    const [tracks, setTracks] = useState<LocalVideoTrack[]>([]);
+    const participantIdentities = ["Participant 1", "Participant 2", "Participant 3"]; // Example identities
 
-    // Simulate attaching a video track for debugging
-    const handleAttachTrack = () => {
-        // Here you would normally get the track from your video call setup
-        // For debugging, you can create a mock track or use a real one if available
-        // setTrack(mockTrack); // Uncomment and replace with actual track
+    // Function to create a mock LocalVideoTrack
+    const createMockTrack = () => {
+        const mockTrack = {
+            attach: (element: HTMLVideoElement) => {
+                // Simulate attaching the track to a video element
+                console.log("Track attached to video element");
+            },
+            detach: () => {
+                // Simulate detaching the track
+                console.log("Track detached");
+            },
+            sid: Math.random().toString(36).substring(2, 15), // Random SID for the track
+        } as LocalVideoTrack;
+
+        return mockTrack;
+    };
+
+    const handleAttachTracks = () => {
+        const newTracks = participantIdentities.map(() => createMockTrack());
+        setTracks(newTracks); // Set the mock tracks
     };
 
     return (
         <div className="text-center mt-5">
             <h2>Debug Video Component</h2>
-            <button className="btn btn-primary" onClick={handleAttachTrack}>
-                Attach Video Track
+            <button className="btn btn-primary" onClick={handleAttachTracks}>
+                Attach Video Tracks
             </button>
-            {track && (
-                <VideoComponent track={track} participantIdentity={participantIdentity} local={true} />
-            )}
+            <div className="video-grid mt-4">
+                {tracks.map((track, index) => (
+                    <VideoComponent 
+                        key={track.sid} 
+                        track={track} 
+                        participantIdentity={participantIdentities[index]} 
+                        local={true} 
+                    />
+                ))}
+            </div>
         </div>
     );
 }
