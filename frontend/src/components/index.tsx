@@ -70,7 +70,7 @@ function RoomComponent() {
             setLocalTrack(room.localParticipant.videoTrackPublications.values().next().value.videoTrack);
         } catch (error) {
             console.log("There was an error connecting to the room:", (error as Error).message);
-            await leaveRoom();
+            // await leaveRoom();
         }
     }
 
