@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import Homepage from './components/Homepage';
 import RoomComponent from './components';
 import RecordPage from './components/RecordPage';
-import DebugVideoComponent from './components/DebugVideoComponent';
 import Navbar from './components/Navbar';
 
 function App() {
@@ -31,7 +30,6 @@ function App() {
                 <Route path="/" element={<Homepage />} />
                 <Route path="/room" element={<RoomComponent />} />
                 <Route path="/record" element={<RecordPage />} />
-                <Route path="/debug-video" element={<DebugVideoComponent />} />
             </Routes>
         </>
     );

@@ -118,7 +118,7 @@ function RoomComponent() {
                         roomName={roomName}
                         leaveRoom={leaveRoom}
                     />
-                    <div id="layout-container">
+                    <div id="layout-container" className='video-grid'>
                         <TrackDisplay
                             localTrack={localTrack}
                             participantName={participantName}
