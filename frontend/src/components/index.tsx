@@ -9,6 +9,7 @@ import { LocalVideoTrack,
 import JoinRoomForm from './JoinRoomForm';
 import RoomHeader from './RoomHeader';
 import TrackDisplay from './TrackDisplay';
+import CallToolsTip from './CallToolsTip';
 
 type TrackInfo = {
     trackPublication: RemoteTrackPublication;
@@ -47,6 +48,28 @@ function RoomComponent() {
     const [remoteTracks, setRemoteTracks] = useState<TrackInfo[]>([]);
     const [participantName, setParticipantName] = useState("Participant" + Math.floor(Math.random() * 100));
     const [roomName, setRoomName] = useState("Room");
+    const [isCameraEnabled, setIsCameraEnabled] = useState(true);
+    const [isMicrophoneEnabled, setIsMicrophoneEnabled] = useState(true);
+
+    // Toggle camera
+    const toggleCamera = async () => {
+        if (isCameraEnabled) {
+            await room?.localParticipant.setCameraEnabled(false);
+        } else {
+            await room?.localParticipant.setCameraEnabled(true);
+        }
+        setIsCameraEnabled(!isCameraEnabled);
+    };
+
+    // Toggle microphone
+    const toggleMicrophone = async () => {
+        if (isMicrophoneEnabled) {
+            await room?.localParticipant.setMicrophoneEnabled(false);
+        } else {
+            await room?.localParticipant.setMicrophoneEnabled(true);
+        }
+        setIsMicrophoneEnabled(!isMicrophoneEnabled);
+    };
 
     async function joinRoom() {
         const room = new Room();
@@ -125,6 +148,12 @@ function RoomComponent() {
                             remoteTracks={remoteTracks}
                         />
                     </div>
+                    <CallToolsTip
+                        toggleCamera={toggleCamera}
+                        toggleMicrophone={toggleMicrophone}
+                        isCameraEnabled={isCameraEnabled}
+                        isMicrophoneEnabled={isMicrophoneEnabled}
+                    />
                 </div>
             )}
         </>
