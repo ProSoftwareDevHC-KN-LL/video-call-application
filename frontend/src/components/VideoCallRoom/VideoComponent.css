@@ -1,5 +1,5 @@
 .video-grid {
-    padding: 50px;
+    padding: 10px;
     display: grid; /* Use grid layout */
     grid-template-columns: repeat(2, 1fr); /* Two columns */
     gap: 15px; /* Space between video components */
@@ -9,8 +9,7 @@
 
 .video-container {
     position: relative;
-    width: 100%; /* Full width */
-    height: 100%; /* Set a fixed height for the video */
+    height: 250px; /* Set a fixed height for the video */
     border: 2px solid #4CAF50; /* Green border for video */
     border-radius: 8px; /* Rounded corners */
     overflow: hidden; /* Hide overflow */
@@ -18,8 +17,6 @@
 }
 
 .video-container video {
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
     object-fit: cover; /* Cover the container */
     border-radius: 8px; /* Match the container's rounded corners */
 }
@@ -28,19 +25,11 @@
     position: absolute;
     bottom: 10px; /* Position at the bottom */
     left: 10px; /* Position from the left */
-    color: white; /* Text color */
     background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
     padding: 5px 10px; /* Padding around text */
     border-radius: 4px; /* Rounded corners for text background */
     font-size: 14px; /* Font size */
     font-weight: bold; /* Bold text */
-}
-
-/* Centering the last participant in an odd-numbered row */
-.video-grid > :nth-child(odd):last-child {
-    width: 50%;
-    grid-column: 1 / -1; /* Span across both columns */
-    justify-self: center; /* Center the participant */
 }
 
 /* Media Queries */

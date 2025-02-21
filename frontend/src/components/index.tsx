@@ -46,7 +46,7 @@ function RoomComponent() {
     const [localTrack, setLocalTrack] = useState<LocalVideoTrack | undefined>(undefined);
     const [remoteTracks, setRemoteTracks] = useState<TrackInfo[]>([]);
     const [participantName, setParticipantName] = useState("Participant" + Math.floor(Math.random() * 100));
-    const [roomName, setRoomName] = useState("Test Room");
+    const [roomName, setRoomName] = useState("Room");
 
     async function joinRoom() {
         const room = new Room();
@@ -70,7 +70,7 @@ function RoomComponent() {
             setLocalTrack(room.localParticipant.videoTrackPublications.values().next().value.videoTrack);
         } catch (error) {
             console.log("There was an error connecting to the room:", (error as Error).message);
-            await leaveRoom();
+            // await leaveRoom();
         }
     }
 
@@ -118,7 +118,7 @@ function RoomComponent() {
                         roomName={roomName}
                         leaveRoom={leaveRoom}
                     />
-                    <div id="layout-container" className='video-grid'>
+                    <div id="layout-container" className="video-grid d-flex flex-wrap justify-content-center">
                         <TrackDisplay
                             localTrack={localTrack}
                             participantName={participantName}
