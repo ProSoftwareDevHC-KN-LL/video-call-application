@@ -7,9 +7,9 @@ import { LocalVideoTrack,
         RoomEvent
     } from "livekit-client";
 import JoinRoomForm from './JoinRoomForm';
-import RoomHeader from './RoomHeader';
+import RoomHeader from './VideoCallRoom/RoomHeader';
 import TrackDisplay from './TrackDisplay';
-import CallToolsTip from './CallToolsTip';
+import CallToolsTip from './VideoCallRoom/CallToolsTip';
 
 type TrackInfo = {
     trackPublication: RemoteTrackPublication;
@@ -50,6 +50,7 @@ function RoomComponent() {
     const [roomName, setRoomName] = useState("Room");
     const [isCameraEnabled, setIsCameraEnabled] = useState(true);
     const [isMicrophoneEnabled, setIsMicrophoneEnabled] = useState(true);
+    const [isScreenSharing, setIsScreenSharing] = useState(false);
 
     // Toggle camera
     const toggleCamera = async () => {
@@ -63,12 +64,30 @@ function RoomComponent() {
 
     // Toggle microphone
     const toggleMicrophone = async () => {
-        if (isMicrophoneEnabled) {
-            await room?.localParticipant.setMicrophoneEnabled(false);
-        } else {
-            await room?.localParticipant.setMicrophoneEnabled(true);
+        if (!room) {
+            console.warn("Not connected to a room.");
+            return; // Prevent toggling if not connected
         }
-        setIsMicrophoneEnabled(!isMicrophoneEnabled);
+
+        try {
+            if (isMicrophoneEnabled) {
+                await room.localParticipant.setMicrophoneEnabled(false);
+            } else {
+                await room.localParticipant.setMicrophoneEnabled(true);
+            }
+            setIsMicrophoneEnabled(!isMicrophoneEnabled);
+        } catch (error) {
+            console.error("Error toggling microphone:", error);
+        }
+    };
+
+    const toggleScreenShare = async () => {
+        if (isScreenSharing) {
+            await room?.localParticipant.setScreenShareEnabled(false);
+        } else {
+            await room?.localParticipant.setScreenShareEnabled(true);
+        }
+        setIsScreenSharing(!isScreenSharing);
     };
 
     async function joinRoom() {
@@ -148,8 +167,10 @@ function RoomComponent() {
                     <CallToolsTip
                         toggleCamera={toggleCamera}
                         toggleMicrophone={toggleMicrophone}
+                        toggleScreenShare={toggleScreenShare}
                         isCameraEnabled={isCameraEnabled}
                         isMicrophoneEnabled={isMicrophoneEnabled}
+                        isScreenSharing={isScreenSharing}
                         leaveRoom={leaveRoom}
                     />
                 </div>

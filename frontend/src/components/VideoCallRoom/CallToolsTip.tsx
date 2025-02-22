@@ -4,6 +4,8 @@ type CallToolsTipProps = {
     isCameraEnabled: boolean;
     isMicrophoneEnabled: boolean;
     leaveRoom: () => void;
+    toggleScreenShare: () => Promise<void>;
+    isScreenSharing: boolean;
 };
 
 const CallToolsTip: React.FC<CallToolsTipProps> = ({
@@ -12,6 +14,8 @@ const CallToolsTip: React.FC<CallToolsTipProps> = ({
     isCameraEnabled,
     isMicrophoneEnabled,
     leaveRoom,
+    toggleScreenShare,
+    isScreenSharing,
 }) => {
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
@@ -21,6 +25,9 @@ const CallToolsTip: React.FC<CallToolsTipProps> = ({
                 </button>
                 <button onClick={toggleCamera} className="btn btn-secondary me-2">
                     {isCameraEnabled ? 'Turn Off' : 'Turn On'} Camera
+                </button>
+                <button onClick={toggleScreenShare} className="btn btn-secondary me-2">
+                    {isScreenSharing ? 'Stop Sharing' : 'Share Screen'}
                 </button>
             </div>
             <button onClick={leaveRoom} className="btn btn-danger">
