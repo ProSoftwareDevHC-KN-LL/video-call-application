@@ -24,7 +24,7 @@ function JoinRoomForm({
     const isDarkMode = document.documentElement.getAttribute('data-bs-theme') === 'dark';
 
     return (
-        <div id="join" className={`text-center mt-5 ${isDarkMode ? 'bg-dark text-light' : 'bg-light'}`}>
+        <div id="join" className={`container text-center mt-5 ${isDarkMode ? 'bg-dark text-light' : 'bg-light'}`}>
             <div id="join-dialog" className={`p-4 rounded shadow ${isDarkMode ? 'bg-dark' : 'bg-light'}`}>
                 <h2>Join a Video Room</h2>
                 <form
