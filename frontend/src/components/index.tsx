@@ -10,7 +10,6 @@ import JoinRoomForm from './JoinRoomForm';
 import RoomHeader from './RoomHeader';
 import TrackDisplay from './TrackDisplay';
 import CallToolsTip from './CallToolsTip';
-import MeetingSetup from './MeetingSetup';
 
 type TrackInfo = {
     trackPublication: RemoteTrackPublication;
@@ -51,7 +50,6 @@ function RoomComponent() {
     const [roomName, setRoomName] = useState("Room");
     const [isCameraEnabled, setIsCameraEnabled] = useState(true);
     const [isMicrophoneEnabled, setIsMicrophoneEnabled] = useState(true);
-    const [isSetupComplete, setIsSetupComplete] = useState(false);
 
     // Toggle camera
     const toggleCamera = async () => {
@@ -137,13 +135,9 @@ function RoomComponent() {
                     setRoomName={setRoomName}
                     joinRoom={joinRoom}
                 />
-            ) :
-            isSetupComplete ?
-            (
+            ) : (
                 <div id="room">
-                    <RoomHeader
-                        roomName={roomName}
-                    />
+                    <RoomHeader roomName={roomName} />
                     <div id="layout-container" className="video-grid d-flex flex-wrap justify-content-center">
                         <TrackDisplay
                             localTrack={localTrack}
@@ -159,14 +153,7 @@ function RoomComponent() {
                         leaveRoom={leaveRoom}
                     />
                 </div>
-            )
-            : (
-                <MeetingSetup
-                    onSetupComplete={() => setIsSetupComplete(true)}
-                    room={room}
-                />
-            )
-            }
+            )}
         </>
     );
 }

@@ -12,7 +12,7 @@ function Homepage() {
     };
 
     return (
-        <div className="homepage text-center mt-5">
+        <div className="container homepage text-center mt-5">
             <h2>Welcome!</h2>
             <p>Manage your calls effectively</p>
             <div className="row">
