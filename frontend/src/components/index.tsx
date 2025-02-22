@@ -137,11 +137,12 @@ function RoomComponent() {
                     setRoomName={setRoomName}
                     joinRoom={joinRoom}
                 />
-            ) : isSetupComplete ? (
+            ) :
+            isSetupComplete ?
+            (
                 <div id="room">
                     <RoomHeader
                         roomName={roomName}
-                        leaveRoom={leaveRoom}
                     />
                     <div id="layout-container" className="video-grid d-flex flex-wrap justify-content-center">
                         <TrackDisplay
@@ -155,14 +156,17 @@ function RoomComponent() {
                         toggleMicrophone={toggleMicrophone}
                         isCameraEnabled={isCameraEnabled}
                         isMicrophoneEnabled={isMicrophoneEnabled}
+                        leaveRoom={leaveRoom}
                     />
                 </div>
-            ) : (
+            )
+            : (
                 <MeetingSetup
                     onSetupComplete={() => setIsSetupComplete(true)}
                     room={room}
                 />
-            )}
+            )
+            }
         </>
     );
 }
