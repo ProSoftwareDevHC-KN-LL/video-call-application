@@ -1,0 +1,40 @@
+.video-grid {
+    padding: 10px;
+    display: grid; /* Use grid layout */
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+    gap: 15px; /* Space between video components */
+    max-height: calc(100vh - 4rem); /* Limit height to the viewport */
+    overflow-y: auto; /* Allow vertical scrolling if content exceeds height */
+}
+
+.video-container {
+    position: relative;
+    height: 250px; /* Set a fixed height for the video */
+    border: 2px solid #4CAF50; /* Green border for video */
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* Hide overflow */
+    background-color: #000; /* Black background for video */
+}
+
+.video-container video {
+    object-fit: cover; /* Cover the container */
+    border-radius: 8px; /* Match the container's rounded corners */
+}
+
+.video-container .participant-data {
+    position: absolute;
+    bottom: 10px; /* Position at the bottom */
+    left: 10px; /* Position from the left */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    padding: 5px 10px; /* Padding around text */
+    border-radius: 4px; /* Rounded corners for text background */
+    font-size: 14px; /* Font size */
+    font-weight: bold; /* Bold text */
+}
+
+/* Media Queries */
+@media screen and (max-width: 480px) {
+    .video-container {
+        aspect-ratio: 9/16; /* Adjust aspect ratio for smaller screens */
+    }
+}
