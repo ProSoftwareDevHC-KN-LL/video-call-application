@@ -7,8 +7,9 @@ import { LocalVideoTrack,
         RoomEvent
     } from "livekit-client";
 import JoinRoomForm from './JoinRoomForm';
-import RoomHeader from './RoomHeader';
+import RoomHeader from './VideoCallRoom/RoomHeader';
 import TrackDisplay from './TrackDisplay';
+import CallToolsTip from './VideoCallRoom/CallToolsTip';
 
 type TrackInfo = {
     trackPublication: RemoteTrackPublication;
@@ -46,7 +47,48 @@ function RoomComponent() {
     const [localTrack, setLocalTrack] = useState<LocalVideoTrack | undefined>(undefined);
     const [remoteTracks, setRemoteTracks] = useState<TrackInfo[]>([]);
     const [participantName, setParticipantName] = useState("Participant" + Math.floor(Math.random() * 100));
-    const [roomName, setRoomName] = useState("Test Room");
+    const [roomName, setRoomName] = useState("Room");
+    const [isCameraEnabled, setIsCameraEnabled] = useState(true);
+    const [isMicrophoneEnabled, setIsMicrophoneEnabled] = useState(true);
+    const [isScreenSharing, setIsScreenSharing] = useState(false);
+
+    // Toggle camera
+    const toggleCamera = async () => {
+        if (isCameraEnabled) {
+            await room?.localParticipant.setCameraEnabled(false);
+        } else {
+            await room?.localParticipant.setCameraEnabled(true);
+        }
+        setIsCameraEnabled(!isCameraEnabled);
+    };
+
+    // Toggle microphone
+    const toggleMicrophone = async () => {
+        if (!room) {
+            console.warn("Not connected to a room.");
+            return; // Prevent toggling if not connected
+        }
+
+        try {
+            if (isMicrophoneEnabled) {
+                await room.localParticipant.setMicrophoneEnabled(false);
+            } else {
+                await room.localParticipant.setMicrophoneEnabled(true);
+            }
+            setIsMicrophoneEnabled(!isMicrophoneEnabled);
+        } catch (error) {
+            console.error("Error toggling microphone:", error);
+        }
+    };
+
+    const toggleScreenShare = async () => {
+        if (isScreenSharing) {
+            await room?.localParticipant.setScreenShareEnabled(false);
+        } else {
+            await room?.localParticipant.setScreenShareEnabled(true);
+        }
+        setIsScreenSharing(!isScreenSharing);
+    };
 
     async function joinRoom() {
         const room = new Room();
@@ -114,17 +156,23 @@ function RoomComponent() {
                 />
             ) : (
                 <div id="room">
-                    <RoomHeader
-                        roomName={roomName}
-                        leaveRoom={leaveRoom}
-                    />
-                    <div id="layout-container">
+                    <RoomHeader roomName={roomName} />
+                    <div id="layout-container" className="video-grid d-flex flex-wrap justify-content-center">
                         <TrackDisplay
                             localTrack={localTrack}
                             participantName={participantName}
                             remoteTracks={remoteTracks}
                         />
                     </div>
+                    <CallToolsTip
+                        toggleCamera={toggleCamera}
+                        toggleMicrophone={toggleMicrophone}
+                        toggleScreenShare={toggleScreenShare}
+                        isCameraEnabled={isCameraEnabled}
+                        isMicrophoneEnabled={isMicrophoneEnabled}
+                        isScreenSharing={isScreenSharing}
+                        leaveRoom={leaveRoom}
+                    />
                 </div>
             )}
         </>

@@ -1,5 +1,6 @@
 import VideoComponent from './VideoCallRoom/VideoComponent';
 import AudioComponent from './VideoCallRoom/AudioComponent';
+import ScreenShareComponent from './VideoCallRoom/ScreenShareComponent';
 
 type TrackDisplayProps = {
     localTrack: any; // Adjust type as necessary
@@ -13,20 +14,32 @@ function TrackDisplay({ localTrack, participantName, remoteTracks }: TrackDispla
             {localTrack && (
                 <VideoComponent track={localTrack} participantIdentity={participantName} local={true} />
             )}
-            {remoteTracks.map((remoteTrack) =>
-                remoteTrack.trackPublication.kind === "video" ? (
-                    <VideoComponent
-                        key={remoteTrack.trackPublication.trackSid}
-                        track={remoteTrack.trackPublication.videoTrack!}
-                        participantIdentity={remoteTrack.participantIdentity}
-                    />
-                ) : (
-                    <AudioComponent
-                        key={remoteTrack.trackPublication.trackSid}
-                        track={remoteTrack.trackPublication.audioTrack!}
-                    />
-                )
-            )}
+            {remoteTracks.map((remoteTrack) => {
+                if (remoteTrack.trackPublication.kind === "video") {
+                    return (
+                        <VideoComponent
+                            key={remoteTrack.trackPublication.trackSid}
+                            track={remoteTrack.trackPublication.videoTrack!}
+                            participantIdentity={remoteTrack.participantIdentity}
+                        />
+                    );
+                } else if (remoteTrack.trackPublication.kind === "audio") {
+                    return (
+                        <AudioComponent
+                            key={remoteTrack.trackPublication.trackSid}
+                            track={remoteTrack.trackPublication.audioTrack!}
+                        />
+                    );
+                } else if (remoteTrack.trackPublication.kind === "screen") {
+                    return (
+                        <ScreenShareComponent
+                            key={remoteTrack.trackPublication.trackSid}
+                            track={remoteTrack.trackPublication.videoTrack!}
+                        />
+                    );
+                }
+                return null;
+            })}
         </>
     );
 }

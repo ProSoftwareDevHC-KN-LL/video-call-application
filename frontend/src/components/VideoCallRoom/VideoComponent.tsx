@@ -22,11 +22,11 @@ function VideoComponent({ track, participantIdentity, local = false }: VideoComp
     }, [track]);
 
     return (
-        <div id={"camera-" + participantIdentity} className="video-container">
+        <div id={"camera-" + participantIdentity} className="video-container d-flex flex-column align-items-center">
             <div className="participant-data">
-                <p>{participantIdentity + (local ? " (You)" : "")}</p>
+                <p className="text-white">{participantIdentity + (local ? " (You)" : "")}</p>
             </div>
-            <video ref={videoElement} id={track.sid}></video>
+            <video ref={videoElement} id={track.sid} className="w-100 h-100" />
         </div>
     );
 }

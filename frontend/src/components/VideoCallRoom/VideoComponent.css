@@ -1,34 +1,40 @@
+.video-grid {
+    padding: 10px;
+    display: grid; /* Use grid layout */
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+    gap: 15px; /* Space between video components */
+    max-height: calc(100vh - 4rem); /* Limit height to the viewport */
+    overflow-y: auto; /* Allow vertical scrolling if content exceeds height */
+}
+
 .video-container {
     position: relative;
-    background: #3b3b3b;
-    aspect-ratio: 16/9;
-    border-radius: 6px;
-    overflow: hidden;
+    height: 250px; /* Set a fixed height for the video */
+    border: 2px solid #4CAF50; /* Green border for video */
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* Hide overflow */
+    background-color: #000; /* Black background for video */
 }
 
 .video-container video {
-    width: 100%;
-    height: 100%;
+    object-fit: cover; /* Cover the container */
+    border-radius: 8px; /* Match the container's rounded corners */
 }
 
 .video-container .participant-data {
     position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.participant-data p {
-    background: #f8f8f8;
-    margin: 0;
-    padding: 0 5px;
-    color: #777777;
-    font-weight: bold;
-    border-bottom-right-radius: 4px;
+    bottom: 10px; /* Position at the bottom */
+    left: 10px; /* Position from the left */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    padding: 5px 10px; /* Padding around text */
+    border-radius: 4px; /* Rounded corners for text background */
+    font-size: 14px; /* Font size */
+    font-weight: bold; /* Bold text */
 }
 
 /* Media Queries */
 @media screen and (max-width: 480px) {
     .video-container {
-        aspect-ratio: 9/16;
+        aspect-ratio: 9/16; /* Adjust aspect ratio for smaller screens */
     }
 }
