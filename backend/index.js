@@ -13,6 +13,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.raw({ type: "application/webhook+json" }));
 
+app.get("/", (req, res) => {
+  res.send(`Server is running on port ${SERVER_PORT}`);
+});
+
 app.post("/token", async (req, res) => {
   const roomName = req.body.roomName;
   const participantName = req.body.participantName;
