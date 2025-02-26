@@ -7,16 +7,16 @@ function Homepage() {
         navigate('/room'); // Navigate to the RoomComponent
     };
 
-    const handleRecordPageClick = () => {
-        navigate('/record'); // Navigate to the Record page
-    };
+    // const handleRecordPageClick = () => {
+    //     navigate('/record'); // Navigate to the Record page
+    // };
 
     return (
         <div className="container homepage text-center mt-5">
             <h2>Welcome!</h2>
             <p>Manage your calls effectively</p>
             <div className="row">
-                <div className="col-md-6 mb-4">
+                <div className="col-md mb-4">
                     <div className="card text-white bg-success">
                         <div className="card-body">
                             <h5 className="card-title">New Call</h5>
@@ -30,7 +30,7 @@ function Homepage() {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-6 mb-4">
+                {/* <div className="col-md-6 mb-4">
                     <div className="card text-white bg-secondary">
                         <div className="card-body">
                             <h5 className="card-title">Recordings</h5>
@@ -43,7 +43,7 @@ function Homepage() {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );
