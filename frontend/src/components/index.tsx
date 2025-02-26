@@ -18,8 +18,8 @@ type TrackInfo = {
 
 // When running OpenVidu locally, leave these variables empty
 // For other deployment type, configure them with correct URLs depending on your deployment
-let APPLICATION_SERVER_URL = "";
-let LIVEKIT_URL = "";
+let APPLICATION_SERVER_URL = import.meta.env.VITE_APP_SERVER_URL || "";
+let LIVEKIT_URL = import.meta.env.VITE_LIVEKIT_URL || "";
 configureUrls();
 
 function configureUrls() {
@@ -107,6 +107,8 @@ function RoomComponent() {
 
         try {
             const token = await getToken(roomName, participantName);
+            console.log("token", token);
+            
             await room.connect(LIVEKIT_URL, token);
             await room.localParticipant.enableCameraAndMicrophone();
             setLocalTrack(room.localParticipant.videoTrackPublications.values().next().value.videoTrack);

@@ -6,6 +6,7 @@ import { AccessToken, WebhookReceiver } from "livekit-server-sdk";
 const SERVER_PORT = process.env.SERVER_PORT || 6080;
 const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY || "devkey";
 const LIVEKIT_API_SECRET = process.env.LIVEKIT_API_SECRET || "secret";
+const LIVEKIT_URL = process.env.LIVEKIT_URL || "http://localhost:7880";
 
 const app = express();
 
@@ -28,6 +29,11 @@ app.post("/token", async (req, res) => {
 
   const at = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET, {
     identity: participantName,
+    name: participantName,
+    metadata: JSON.stringify({
+      livekitUrl: LIVEKIT_URL,
+      roomAdmin: true
+    })
   });
   at.addGrant({ roomJoin: true, room: roomName });
   const token = await at.toJwt();
