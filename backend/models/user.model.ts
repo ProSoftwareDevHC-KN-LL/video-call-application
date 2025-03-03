@@ -24,4 +24,4 @@ UserSchema.index({ email: 1 }); // Fast lookup by email
 // Models
 const User = model<IUser>("User", UserSchema);
 
-export { User };
+export default User;

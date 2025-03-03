@@ -1,6 +1,10 @@
 import "dotenv/config";
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
+import userRoutes from "./routes/userRoutes";
+import callRoutes from "./routes/callRoutes";
+import { setupWebSocket } from "./websocket/websocket";
+import connectDB from "./config/db";
 import { AccessToken, WebhookReceiver } from "livekit-server-sdk";
 
 const SERVER_PORT = process.env.SERVER_PORT || 6080;
@@ -8,22 +12,27 @@ const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY || "devkey";
 const LIVEKIT_API_SECRET = process.env.LIVEKIT_API_SECRET || "secret";
 
 const app = express();
+connectDB();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.raw({ type: "application/webhook+json" }));
 
-app.get("/", (req, res) => {
+
+app.use("/api/users", userRoutes);
+app.use("/api/calls", callRoutes);
+
+
+app.get("/", (req: Request, res: Response) => {
   res.send(`Server is running on port ${SERVER_PORT}`);
 });
 
-app.post("/token", async (req, res) => {
+app.post("/token", async (req: Request, res: Response): Promise<any> => {
   const roomName = req.body.roomName;
   const participantName = req.body.participantName;
 
   if (!roomName || !participantName) {
-    res.status(400).json({ errorMessage: "roomName and participantName are required" });
-    return;
+    return res.status(400).json({ errorMessage: "roomName and participantName are required" });
   }
 
   const at = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET, {
@@ -34,17 +43,11 @@ app.post("/token", async (req, res) => {
   res.json({ token });
 });
 
-const webhookReceiver = new WebhookReceiver(
-  LIVEKIT_API_KEY,
-  LIVEKIT_API_SECRET
-);
+const webhookReceiver = new WebhookReceiver(LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
 
-app.post("/livekit/webhook", async (req, res) => {
+app.post("/livekit/webhook", async (req: Request, res: Response) => {
   try {
-    const event = await webhookReceiver.receive(
-      req.body,
-      req.get("Authorization")
-    );
+    const event = await webhookReceiver.receive(req.body, req.get("Authorization"));
     console.log(event);
   } catch (error) {
     console.error("Error validating webhook event", error);
@@ -52,6 +55,8 @@ app.post("/livekit/webhook", async (req, res) => {
   res.status(200).send();
 });
 
-app.listen(SERVER_PORT, () => {
+const server = app.listen(SERVER_PORT, () => {
   console.log("Server started on port:", SERVER_PORT);
 });
+
+setupWebSocket(server);

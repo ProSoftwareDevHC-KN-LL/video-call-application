@@ -36,4 +36,4 @@ CallSchema.index({ receiverId: 1 });
 // Models
 const Call = model<ICall>("Call", CallSchema);
 
-export { Call };
+export default Call;
