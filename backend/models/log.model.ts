@@ -3,7 +3,7 @@ import mongoose, { mongo, Schema } from "mongoose";
 interface ILog extends Document {
     userId: mongoose.Types.ObjectId,
     callId: mongoose.Types.ObjectId,
-    type: "ontgoing" | "incoming",
+    type: "outgoing" | "incoming",
     status: "missed" | "answered" | "rejected"
     timestamp: Date
 }
