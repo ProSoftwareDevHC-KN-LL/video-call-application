@@ -5,7 +5,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start": "node index.js"
+        "start": "tsx index.ts"
     },
     "dependencies": {
         "cors": "2.8.5",
