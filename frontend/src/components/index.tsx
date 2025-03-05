@@ -108,7 +108,6 @@ function RoomComponent() {
         try {
             const token = await getToken(roomName, participantName);
             console.log("token", token);
-            
             await room.connect(LIVEKIT_URL, token);
             await room.localParticipant.enableCameraAndMicrophone();
             setLocalTrack(room.localParticipant.videoTrackPublications.values().next().value.videoTrack);
