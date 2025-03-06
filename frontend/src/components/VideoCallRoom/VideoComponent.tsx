@@ -15,12 +15,24 @@ function VideoComponent({ track, participantIdentity, local = false }: VideoComp
     const theme = useTheme();
 
     useEffect(() => {
-        if (videoElement.current) {
-            track.attach(videoElement.current);
+        const videoEl = videoElement.current;
+        if (videoEl) {
+            track.attach(videoEl);
+            // Enable picture-in-picture if available
+            if (document.pictureInPictureEnabled) {
+                videoEl.addEventListener('loadedmetadata', () => {
+                    videoEl.requestPictureInPicture().catch(() => {});
+                });
+            }
         }
 
         return () => {
-            track.detach();
+            if (videoEl) {
+                track.detach(videoEl);
+                if (document.pictureInPictureElement === videoEl) {
+                    document.exitPictureInPicture().catch(() => {});
+                }
+            }
         };
     }, [track]);
 
@@ -29,6 +41,8 @@ function VideoComponent({ track, participantIdentity, local = false }: VideoComp
             elevation={theme.palette.mode === 'dark' ? 4 : 1}
             sx={{
                 position: 'relative',
+                width: '100%',
+                height: '100%',
                 borderRadius: 2,
                 overflow: 'hidden',
                 bgcolor: 'background.paper',
@@ -40,12 +54,15 @@ function VideoComponent({ track, participantIdentity, local = false }: VideoComp
             }}
         >
             <Box
-                id={"camera-" + participantIdentity}
                 sx={{
                     position: 'relative',
-                    height: 250,
                     width: '100%',
+                    height: '100%',
+                    aspectRatio: '16/9',
                     bgcolor: 'common.black',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                 }}
             >
                 <video
@@ -55,6 +72,7 @@ function VideoComponent({ track, participantIdentity, local = false }: VideoComp
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
+                        transform: local ? 'scaleX(-1)' : 'none', // Mirror local video
                     }}
                 />
                 
@@ -70,6 +88,7 @@ function VideoComponent({ track, participantIdentity, local = false }: VideoComp
                         display: 'flex',
                         alignItems: 'center',
                         gap: 1,
+                        zIndex: 1,
                     }}
                 >
                     <PersonOutline sx={{ color: 'white', fontSize: 20 }} />
@@ -79,6 +98,7 @@ function VideoComponent({ track, participantIdentity, local = false }: VideoComp
                             color: 'white',
                             fontWeight: 500,
                             textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                            fontSize: '0.9rem',
                         }}
                     >
                         {participantIdentity}{local ? " (You)" : ""}

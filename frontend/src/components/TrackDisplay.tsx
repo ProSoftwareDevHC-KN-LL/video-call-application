@@ -1,7 +1,6 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import VideoComponent from './VideoCallRoom/VideoComponent';
-import AudioComponent from './VideoCallRoom/AudioComponent';
+import VideoGrid from './VideoCallRoom/VideoGrid';
 import ScreenShareComponent from './VideoCallRoom/ScreenShareComponent';
 
 type TrackDisplayProps = {
@@ -15,85 +14,63 @@ function TrackDisplay({ localTrack, participantName, remoteTracks }: TrackDispla
     const hasScreenShare = remoteTracks.some(track => track.trackPublication.kind === "screen");
 
     return (
-        <Box
+        <Container
+            maxWidth={false}
             sx={{
                 width: '100%',
-                height: 'calc(100vh - 140px)', // Adjust based on your navbar and controls height
-                p: 2,
-                bgcolor: 'background.default',
+                maxWidth: '1400px !important', // Override default Container maxWidth
+                height: 'calc(100vh - 140px)',
+                px: { xs: 2, sm: 3, md: 4 }, // Responsive padding
+                py: 3,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
             }}
         >
-            <Grid
-                container
-                spacing={2}
-                sx={{
-                    height: '100%',
-                    position: 'relative',
-                }}
-            >
-                {/* Screen Share Section */}
-                {hasScreenShare && (
-                    <Grid item xs={12} sx={{ mb: 2 }}>
-                        {remoteTracks.map((remoteTrack) => {
-                            if (remoteTrack.trackPublication.kind === "screen") {
-                                return (
-                                    <ScreenShareComponent
-                                        key={remoteTrack.trackPublication.trackSid}
-                                        track={remoteTrack.trackPublication.videoTrack!}
-                                    />
-                                );
-                            }
-                            return null;
-                        })}
-                    </Grid>
-                )}
-
-                {/* Video Grid Section */}
-                <Grid
-                    container
-                    item
-                    spacing={2}
-                    xs={12}
-                    sx={{
-                        flexGrow: 1,
-                        height: hasScreenShare ? '40%' : '100%',
+            {/* Screen Share Section */}
+            {hasScreenShare && (
+                <Box 
+                    sx={{ 
+                        flex: '0 0 auto',
+                        maxHeight: '60vh',
+                        bgcolor: 'background.paper',
+                        borderRadius: 2,
+                        overflow: 'hidden',
+                        boxShadow: theme.shadows[4],
                     }}
                 >
-                    {/* Local Video */}
-                    {localTrack && (
-                        <Grid item xs={12} sm={6} md={4} lg={3}>
-                            <VideoComponent
-                                track={localTrack}
-                                participantIdentity={participantName}
-                                local={true}
-                            />
-                        </Grid>
-                    )}
-
-                    {/* Remote Videos and Audio */}
                     {remoteTracks.map((remoteTrack) => {
-                        if (remoteTrack.trackPublication.kind === "video") {
+                        if (remoteTrack.trackPublication.kind === "screen") {
                             return (
-                                <Grid item xs={12} sm={6} md={4} lg={3} key={remoteTrack.trackPublication.trackSid}>
-                                    <VideoComponent
-                                        track={remoteTrack.trackPublication.videoTrack!}
-                                        participantIdentity={remoteTrack.participantIdentity}
-                                    />
-                                </Grid>
-                            );
-                        } else if (remoteTrack.trackPublication.kind === "audio") {
-                            return (
-                                <AudioComponent
+                                <ScreenShareComponent
                                     key={remoteTrack.trackPublication.trackSid}
-                                    track={remoteTrack.trackPublication.audioTrack!}
+                                    track={remoteTrack.trackPublication.videoTrack!}
                                 />
                             );
                         }
                         return null;
                     })}
-                </Grid>
-            </Grid>
-        </Box>
+                </Box>
+            )}
+
+            {/* Video Grid Section */}
+            <Box 
+                sx={{ 
+                    flex: 1,
+                    minHeight: 0,
+                    bgcolor: 'background.paper',
+                    borderRadius: 2,
+                    overflow: 'hidden',
+                    boxShadow: theme.shadows[4],
+                }}
+            >
+                <VideoGrid
+                    localTrack={localTrack}
+                    participantName={participantName}
+                    remoteTracks={remoteTracks}
+                />
+            </Box>
+        </Container>
     );
 }
 
