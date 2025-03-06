@@ -1,4 +1,3 @@
-import React from 'react';
 import { IconButton, Tooltip, useTheme } from '@mui/material';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import { useTheme as useCustomTheme } from '../contexts/ThemeContext';
@@ -27,13 +26,13 @@ const ModeToggle: React.FC<ModeToggleProps> = ({ sx = {} }) => {
                 }}
             >
                 {mode === 'dark' ? (
-                    <Brightness7 sx={{ 
+                    <Brightness7 sx={{
                         color: 'primary.main',
                         transition: 'transform 0.2s ease-in-out',
                         '&:hover': { transform: 'rotate(180deg)' },
                     }} />
                 ) : (
-                    <Brightness4 sx={{ 
+                    <Brightness4 sx={{
                         color: 'primary.main',
                         transition: 'transform 0.2s ease-in-out',
                         '&:hover': { transform: 'rotate(180deg)' },
@@ -44,4 +43,4 @@ const ModeToggle: React.FC<ModeToggleProps> = ({ sx = {} }) => {
     );
 };
 
-export default ModeToggle; 
+export default ModeToggle;
