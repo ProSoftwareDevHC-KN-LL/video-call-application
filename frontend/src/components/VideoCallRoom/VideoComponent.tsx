@@ -15,24 +15,12 @@ function VideoComponent({ track, participantIdentity, local = false }: VideoComp
     const theme = useTheme();
 
     useEffect(() => {
-        const videoEl = videoElement.current;
-        if (videoEl) {
-            track.attach(videoEl);
-            // Enable picture-in-picture if available
-            if (document.pictureInPictureEnabled) {
-                videoEl.addEventListener('loadedmetadata', () => {
-                    videoEl.requestPictureInPicture().catch(() => {});
-                });
-            }
+        if (videoElement.current) {
+            track.attach(videoElement.current);
         }
 
         return () => {
-            if (videoEl) {
-                track.detach(videoEl);
-                if (document.pictureInPictureElement === videoEl) {
-                    document.exitPictureInPicture().catch(() => {});
-                }
-            }
+            track.detach();
         };
     }, [track]);
 
@@ -58,7 +46,6 @@ function VideoComponent({ track, participantIdentity, local = false }: VideoComp
                     position: 'relative',
                     width: '100%',
                     height: '100%',
-                    aspectRatio: '16/9',
                     bgcolor: 'common.black',
                     display: 'flex',
                     alignItems: 'center',
@@ -72,11 +59,10 @@ function VideoComponent({ track, participantIdentity, local = false }: VideoComp
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
-                        transform: local ? 'scaleX(-1)' : 'none', // Mirror local video
+                        transform: local ? 'scaleX(-1)' : 'none',
                     }}
                 />
                 
-                {/* Participant Info Overlay */}
                 <Box
                     sx={{
                         position: 'absolute',
