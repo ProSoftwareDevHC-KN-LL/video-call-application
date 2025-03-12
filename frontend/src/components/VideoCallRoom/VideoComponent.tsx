@@ -59,7 +59,7 @@ function VideoComponent({ track, participantIdentity, local = false }: VideoComp
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
-                        transform: local ? 'scaleX(-1)' : 'none',
+                        transform: 'scaleX(-1)',
                     }}
                 />
                 
