@@ -1,10 +1,69 @@
 .video-grid {
-    padding: 10px;
-    display: grid; /* Use grid layout */
-    grid-template-columns: repeat(2, 1fr); /* Two columns */
-    gap: 15px; /* Space between video components */
-    max-height: calc(100vh - 4rem); /* Limit height to the viewport */
-    overflow-y: auto; /* Allow vertical scrolling if content exceeds height */
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    width: 100%;
+}
+
+/* Custom scrollbar for the video grid */
+.video-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.video-grid::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.video-grid::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.video-grid::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive grid adjustments */
+@media screen and (max-width: 1200px) {
+    .video-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .video-grid {
+        grid-template-columns: 1fr;
+        padding: 8px;
+        gap: 8px;
+    }
+}
+
+/* Screen share container specific styles */
+.screen-share-container {
+    grid-column: 1 / -1;
+    aspect-ratio: 16/9;
+    max-height: 70vh;
+    margin-bottom: 16px;
+}
+
+/* Animation for new participants joining */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.video-container {
+    animation: fadeIn 0.3s ease-out;
 }
 
 .video-container {

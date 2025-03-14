@@ -52,46 +52,57 @@ function RoomComponent() {
     const [isMicrophoneEnabled, setIsMicrophoneEnabled] = useState(true);
     const [isScreenSharing, setIsScreenSharing] = useState(false);
 
+    // Reset all media states
+    const resetMediaStates = () => {
+        setIsCameraEnabled(true);
+        setIsMicrophoneEnabled(true);
+        setIsScreenSharing(false);
+    };
+
     // Toggle camera
     const toggleCamera = async () => {
-        if (isCameraEnabled) {
-            await room?.localParticipant.setCameraEnabled(false);
-        } else {
-            await room?.localParticipant.setCameraEnabled(true);
+        if (!room) return;
+        try {
+            await room.localParticipant.setCameraEnabled(!isCameraEnabled);
+            setIsCameraEnabled(!isCameraEnabled);
+        } catch (error) {
+            console.error("Error toggling camera:", error);
+            // Reset to actual state if toggle fails
+            setIsCameraEnabled(room.localParticipant.isCameraEnabled);
         }
-        setIsCameraEnabled(!isCameraEnabled);
     };
 
     // Toggle microphone
     const toggleMicrophone = async () => {
-        if (!room) {
-            console.warn("Not connected to a room.");
-            return; // Prevent toggling if not connected
-        }
-
+        if (!room) return;
         try {
-            if (isMicrophoneEnabled) {
-                await room.localParticipant.setMicrophoneEnabled(false);
-            } else {
-                await room.localParticipant.setMicrophoneEnabled(true);
-            }
+            await room.localParticipant.setMicrophoneEnabled(!isMicrophoneEnabled);
             setIsMicrophoneEnabled(!isMicrophoneEnabled);
         } catch (error) {
             console.error("Error toggling microphone:", error);
+            // Reset to actual state if toggle fails
+            setIsMicrophoneEnabled(room.localParticipant.isMicrophoneEnabled);
         }
     };
 
+    // Toggle screen share
     const toggleScreenShare = async () => {
-        if (isScreenSharing) {
-            await room?.localParticipant.setScreenShareEnabled(false);
-        } else {
-            await room?.localParticipant.setScreenShareEnabled(true);
+        if (!room) return;
+        try {
+            await room.localParticipant.setScreenShareEnabled(!isScreenSharing);
+            setIsScreenSharing(!isScreenSharing);
+        } catch (error) {
+            console.error("Error toggling screen share:", error);
+            // Reset to actual state if toggle fails
+            setIsScreenSharing(room.localParticipant.isScreenShareEnabled);
         }
-        setIsScreenSharing(!isScreenSharing);
     };
 
     async function joinRoom() {
         const room = new Room();
+        
+        // Reset states before connecting
+        resetMediaStates();
         setRoom(room);
 
         room.on(RoomEvent.TrackSubscribed, (_track: RemoteTrack, publication: RemoteTrackPublication, participant: RemoteParticipant) => {
@@ -105,12 +116,24 @@ function RoomComponent() {
             setRemoteTracks((prev) => prev.filter((track) => track.trackPublication.trackSid !== publication.trackSid));
         });
 
+        // Handle disconnection
+        room.on(RoomEvent.Disconnected, () => {
+            resetMediaStates();
+            setRoom(undefined);
+            setLocalTrack(undefined);
+            setRemoteTracks([]);
+        });
+
         try {
             const token = await getToken(roomName, participantName);
-            console.log("token", token);
             await room.connect(LIVEKIT_URL, token);
             await room.localParticipant.enableCameraAndMicrophone();
             setLocalTrack(room.localParticipant.videoTrackPublications.values().next().value.videoTrack);
+            
+            // Sync states with actual device states
+            setIsCameraEnabled(room.localParticipant.isCameraEnabled);
+            setIsMicrophoneEnabled(room.localParticipant.isMicrophoneEnabled);
+            setIsScreenSharing(room.localParticipant.isScreenShareEnabled);
         } catch (error) {
             console.log("There was an error connecting to the room:", (error as Error).message);
             await leaveRoom();
@@ -118,7 +141,23 @@ function RoomComponent() {
     }
 
     async function leaveRoom() {
-        await room?.disconnect();
+        if (room) {
+            // Ensure all tracks are disabled before disconnecting
+            try {
+                if (isScreenSharing) {
+                    await room.localParticipant.setScreenShareEnabled(false);
+                }
+                await room.localParticipant.setCameraEnabled(false);
+                await room.localParticipant.setMicrophoneEnabled(false);
+            } catch (error) {
+                console.error("Error cleaning up tracks:", error);
+            }
+            
+            await room.disconnect();
+        }
+        
+        // Reset all states
+        resetMediaStates();
         setRoom(undefined);
         setLocalTrack(undefined);
         setRemoteTracks([]);

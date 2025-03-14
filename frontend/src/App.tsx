@@ -1,37 +1,29 @@
-import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import Homepage from './components/Homepage';
 import RoomComponent from './components';
 import RecordPage from './components/RecordPage';
-import Navbar from './components/Navbar';
+import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 
 function App() {
-    const [theme, setTheme] = useState('light');
-
-    useEffect(() => {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            setTheme(savedTheme);
-            document.documentElement.setAttribute('data-bs-theme', savedTheme);
-        }
-    }, []);
-
-    const toggleTheme = () => {
-        const newTheme = theme === 'light' ? 'dark' : 'light';
-        setTheme(newTheme);
-        document.documentElement.setAttribute('data-bs-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-    };
+    const theme = useTheme();
 
     return (
-        <>
-            <Navbar theme={theme} toggleTheme={toggleTheme} />
+        <Box
+            sx={{
+                minHeight: '100vh',
+                bgcolor: 'background.default',
+                color: 'text.primary',
+            }}
+        >
+            <Navbar />
             <Routes>
                 <Route path="/" element={<Homepage />} />
                 <Route path="/room" element={<RoomComponent />} />
                 <Route path="/record" element={<RecordPage />} />
             </Routes>
-        </>
+        </Box>
     );
 }
 

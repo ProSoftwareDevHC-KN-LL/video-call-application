@@ -1,4 +1,14 @@
 import { useNavigate } from 'react-router-dom';
+import {
+    Container,
+    Paper,
+    Typography,
+    TextField,
+    Button,
+    Box,
+    useTheme,
+} from '@mui/material';
+import { VideoCall as VideoCallIcon, ArrowBack } from '@mui/icons-material';
 
 type JoinRoomFormProps = {
     participantName: string;
@@ -16,62 +26,113 @@ function JoinRoomForm({
     joinRoom,
 }: JoinRoomFormProps) {
     const navigate = useNavigate();
+    const theme = useTheme();
 
     const handleBackToHomepage = () => {
         navigate('/');
     };
 
-    const isDarkMode = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        joinRoom();
+    };
 
     return (
-        <div id="join" className={`container text-center mt-5 ${isDarkMode ? 'bg-dark text-light' : 'bg-light'}`}>
-            <div id="join-dialog" className={`p-4 rounded shadow ${isDarkMode ? 'bg-dark' : 'bg-light'}`}>
-                <h2>Join a Video Room</h2>
-                <form
-                    onSubmit={(e) => {
-                        joinRoom();
-                        e.preventDefault();
+        <Container maxWidth="sm" sx={{ mt: 8 }}>
+            <Paper
+                elevation={theme.palette.mode === 'dark' ? 4 : 1}
+                sx={{
+                    p: 4,
+                    borderRadius: 2,
+                    background: theme.palette.mode === 'dark'
+                        ? 'linear-gradient(45deg, #1e293b 30%, #0f172a 90%)'
+                        : 'linear-gradient(45deg, #f8fafc 30%, #ffffff 90%)',
+                }}
+            >
+                <Box
+                    component="form"
+                    onSubmit={handleSubmit}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 3,
                     }}
                 >
-                    <div className="mb-3 text-start">
-                        <label htmlFor="participant-name" className="form-label">Participant</label>
-                        <input
-                            id="participant-name"
-                            className="form-control"
-                            type="text"
-                            value={participantName}
-                            onChange={(e) => setParticipantName(e.target.value)}
-                            required
+                    <Box sx={{ textAlign: 'center', mb: 2 }}>
+                        <VideoCallIcon
+                            sx={{
+                                fontSize: 48,
+                                color: theme.palette.primary.main,
+                                mb: 2,
+                            }}
                         />
-                    </div>
-                    <div className="mb-3 text-start">
-                        <label htmlFor="room-name" className="form-label">Room</label>
-                        <input
-                            id="room-name"
-                            className="form-control"
-                            type="text"
-                            value={roomName}
-                            onChange={(e) => setRoomName(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button
-                        className="btn btn-lg btn-success me-2"
-                        type="submit"
-                        disabled={!roomName || !participantName}
-                    >
-                        Join!
-                    </button>
-                    <button
-                        className="btn btn-secondary btn-lg"
-                        type="button"
-                        onClick={handleBackToHomepage}
-                    >
-                        Back to Homepage
-                    </button>
-                </form>
-            </div>
-        </div>
+                        <Typography variant="h4" component="h1" gutterBottom>
+                            Join a Video Room
+                        </Typography>
+                    </Box>
+
+                    <TextField
+                        fullWidth
+                        label="Participant Name"
+                        variant="outlined"
+                        value={participantName}
+                        onChange={(e) => setParticipantName(e.target.value)}
+                        required
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                '&.Mui-focused fieldset': {
+                                    borderColor: theme.palette.primary.main,
+                                },
+                            },
+                        }}
+                    />
+
+                    <TextField
+                        fullWidth
+                        label="Room Name"
+                        variant="outlined"
+                        value={roomName}
+                        onChange={(e) => setRoomName(e.target.value)}
+                        required
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                '&.Mui-focused fieldset': {
+                                    borderColor: theme.palette.primary.main,
+                                },
+                            },
+                        }}
+                    />
+
+                    <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            size="large"
+                            disabled={!roomName || !participantName}
+                            fullWidth
+                            sx={{
+                                py: 1.5,
+                                background: theme.palette.mode === 'dark'
+                                    ? 'linear-gradient(45deg, #90caf9 30%, #64b5f6 90%)'
+                                    : 'linear-gradient(45deg, #1976d2 30%, #42a5f5 90%)',
+                            }}
+                        >
+                            Join Room
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            size="large"
+                            onClick={handleBackToHomepage}
+                            startIcon={<ArrowBack />}
+                            fullWidth
+                            sx={{ py: 1.5 }}
+                        >
+                            Back
+                        </Button>
+                    </Box>
+                </Box>
+            </Paper>
+        </Container>
     );
 }
 
