@@ -7,7 +7,7 @@ import { ThemeProviderWrapper } from './contexts/ThemeContext';
 import './index.css';
 
 // Get initial theme from localStorage or default to 'light'
-const initialMode = (localStorage.getItem('themeMode') as 'light' | 'dark') || 'light';
+// const initialMode = (localStorage.getItem('themeMode') as 'light' | 'dark') || 'light';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

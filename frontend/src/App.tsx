@@ -3,11 +3,11 @@ import Navbar from './components/Navbar';
 import Homepage from './components/Homepage';
 import RoomComponent from './components';
 import RecordPage from './components/RecordPage';
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 
 function App() {
-    const theme = useTheme();
+    // const theme = useTheme();
 
     return (
         <Box

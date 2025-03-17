@@ -1,5 +1,5 @@
 import { Box, Container, Grid } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import VideoComponent from './VideoCallRoom/VideoComponent';
 import AudioComponent from './VideoCallRoom/AudioComponent';
 import ScreenShareComponent from './VideoCallRoom/ScreenShareComponent';
@@ -11,7 +11,7 @@ type TrackDisplayProps = {
 };
 
 function TrackDisplay({ localTrack, participantName, remoteTracks }: TrackDisplayProps) {
-    const theme = useTheme();
+    // const theme = useTheme();
     const hasScreenShare = remoteTracks.some(track => track.trackPublication.kind === "screen");
     const videoTracks = remoteTracks.filter(track => track.trackPublication.kind === "video");
     const totalParticipants = localTrack ? videoTracks.length + 1 : videoTracks.length;
