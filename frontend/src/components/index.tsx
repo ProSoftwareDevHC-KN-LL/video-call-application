@@ -18,29 +18,29 @@ type TrackInfo = {
 
 // When running OpenVidu locally, leave these variables empty
 // For other deployment type, configure them with correct URLs depending on your deployment
-let APPLICATION_SERVER_URL = import.meta.env.VITE_APP_SERVER_URL || "";
-let LIVEKIT_URL = import.meta.env.VITE_LIVEKIT_URL || "";
-configureUrls();
+let APPLICATION_SERVER_URL = import.meta.env.VITE_APP_SERVER_URL;
+let LIVEKIT_URL = import.meta.env.VITE_LIVEKIT_URL;
+// configureUrls();
 
-function configureUrls() {
-    // If APPLICATION_SERVER_URL is not configured, use default value from OpenVidu Local deployment
-    if (!APPLICATION_SERVER_URL) {
-        if (window.location.hostname === "localhost") {
-            APPLICATION_SERVER_URL = "http://localhost:6080/";
-        } else {
-            APPLICATION_SERVER_URL = "https://" + window.location.hostname + ":6443/";
-        }
-    }
+// function configureUrls() {
+//     // If APPLICATION_SERVER_URL is not configured, use default value from OpenVidu Local deployment
+//     if (!APPLICATION_SERVER_URL) {
+//         if (window.location.hostname === "localhost") {
+//             APPLICATION_SERVER_URL = "http://localhost:6080/";
+//         } else {
+//             APPLICATION_SERVER_URL = "https://" + window.location.hostname + ":6443/";
+//         }
+//     }
 
-    // If LIVEKIT_URL is not configured, use default value from OpenVidu Local deployment
-    if (!LIVEKIT_URL) {
-        if (window.location.hostname === "localhost") {
-            LIVEKIT_URL = "ws://localhost:7880/";
-        } else {
-            LIVEKIT_URL = "wss://" + window.location.hostname + ":7443/";
-        }
-    }
-}
+//     // If LIVEKIT_URL is not configured, use default value from OpenVidu Local deployment
+//     if (!LIVEKIT_URL) {
+//         if (window.location.hostname === "localhost") {
+//             LIVEKIT_URL = "ws://localhost:7880/";
+//         } else {
+//             LIVEKIT_URL = "wss://" + window.location.hostname + ":7443/";
+//         }
+//     }
+// }
 
 function RoomComponent() {
     const [room, setRoom] = useState<Room | undefined>(undefined);
@@ -128,7 +128,7 @@ function RoomComponent() {
             const token = await getToken(roomName, participantName);
             await room.connect(LIVEKIT_URL, token);
             await room.localParticipant.enableCameraAndMicrophone();
-            setLocalTrack(room.localParticipant.videoTrackPublications.values().next().value.videoTrack);
+            setLocalTrack(room.localParticipant.videoTrackPublications.values().next().value?.videoTrack);
             
             // Sync states with actual device states
             setIsCameraEnabled(room.localParticipant.isCameraEnabled);
