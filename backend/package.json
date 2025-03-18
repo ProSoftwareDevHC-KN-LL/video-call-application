@@ -5,7 +5,9 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start": "tsx index.ts"
+        "build": "npx tsc",
+        "start": "node dist/index.js",
+        "dev": "tsx watch ."
     },
     "dependencies": {
         "cors": "2.8.5",
@@ -20,7 +22,6 @@
     "devDependencies": {
         "@types/express": "^5.0.0",
         "@types/node": "^22.13.5",
-        "ts-node": "^10.9.2",
         "tsx": "^4.19.3",
         "typescript": "^5.8.2"
     }
