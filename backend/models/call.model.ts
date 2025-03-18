@@ -34,6 +34,6 @@ CallSchema.index({ callerId: 1 });
 CallSchema.index({ receiverId: 1 });
 
 // Models
-const Call = model<ICall>("Call", CallSchema);
+const CallModel = model<ICall>("Call", CallSchema);
 
-export default Call;
+export default CallModel;

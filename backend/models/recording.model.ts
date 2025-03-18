@@ -14,6 +14,6 @@ const RecordingSchema = new Schema<IRecording>({
     createdAt: { type: Date, default: Date.now}
 })
 
-const Recording = mongoose.model<IRecording>("Recording", RecordingSchema)
+const RecordingModel = mongoose.model<IRecording>("Recording", RecordingSchema)
 
-export default Recording;
+export default RecordingModel;

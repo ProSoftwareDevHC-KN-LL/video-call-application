@@ -1,41 +1,139 @@
 import { Request, Response } from 'express';
-import userSchema from '../validators/userValidator';
-import User from '../models/user.model';
+import bcrypt from 'bcrypt';
+import UserModel from '../models/user.model';
+import { User, ApiResponse } from '../types';
 
-// Get all users
-export const getAllUsers = async (req: Request, res: Response) => {
+interface RegisterUserRequest {
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
+
+interface UpdateUserRequest {
+    username?: string;
+    email?: string;
+}
+
+// Extended Request type to include user property from auth middleware
+interface AuthRequest extends Request {
+    user?: {
+        id: string;
+        role: string;
+    };
+}
+
+export const registerUser = async (
+    req: Request<{}, {}, RegisterUserRequest>,
+    res: Response<ApiResponse<User>>
+) => {
+    const { username, email, password, confirmPassword } = req.body;
     try {
-      const users = await User.find();
-      res.status(200).json(users);
+        if (!username || !email || !password || !confirmPassword) {
+            return res.status(400).json({
+                success: false,
+                error: 'All fields are required'
+            });
+        }
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                success: false,
+                error: 'Password does not match'
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new UserModel({
+            username,
+            email,
+            password: hashedPassword,
+            role: 'customer'
+        });
+
+        await newUser.save();
+
+        res.status(201).json({
+            success: true,
+            message: 'User registered successfully'
+        });
     } catch (error) {
-      res.status(500).json({ message: "Error fetching users", error });
+        res.status(500).json({
+            success: false,
+            error: 'Failed to register user'
+        });
     }
 };
 
-// Get user by ID
-export const getUserById = async (req: Request, res: Response) => {
+export const getUserProfile = async (
+    req: AuthRequest,
+    res: Response<ApiResponse<User>>
+) => {
     try {
-      const user = await User.findById(req.params.id);
-      if (!user) return res.status(404).json({ message: "User not found" });
-      res.status(200).json(user);
+        const user = await UserModel.findById(req.user?.id).select('-password');
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                error: 'User not found'
+            });
+        }
+        res.json({
+            success: true,
+            data: user
+        });
     } catch (error) {
-      res.status(500).json({ message: "Error fetching user", error });
+        res.status(500).json({
+            success: false,
+            error: 'Failed to fetch user profile'
+        });
     }
 };
 
-export const createUser = async (req: Request, res: Response) => {
-    // Validate the request body against the schema
-    const { error } = userSchema.validate(req.body);
-    if (error) {
-        return res.status(400).json({ message: error.details[0].message });
-    }
-
+export const updateUserProfile = async (
+    req: AuthRequest,
+    res: Response<ApiResponse<User>>
+) => {
+    const { username, email } = req.body as UpdateUserRequest;
     try {
-        const user = new User(req.body);
-        await user.save();
-        res.status(201).json(user);
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: "Error creating user", err });
+        const user = await UserModel.findByIdAndUpdate(
+            req.user?.id,
+            { username, email },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                error: 'User not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            data: user
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: 'Failed to update user profile'
+        });
+    }
+};
+
+export const deleteUserAccount = async (
+    req: AuthRequest,
+    res: Response<ApiResponse<null>>
+) => {
+    try {
+        await UserModel.findByIdAndDelete(req.user?.id);
+        res.json({
+            success: true,
+            message: 'User account deleted successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: 'Failed to delete user account'
+        });
     }
 };
