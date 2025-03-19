@@ -1,16 +1,16 @@
 import express, { Request, Response } from 'express';
-import { getAllCalls, createCall } from "../controllers/callController";
+import { getAllUsers, createUser } from "../controllers/userController.js";
 
 const router = express.Router();
 
-// Define the route for getting all calls
+// Define the route for getting all users
 router.get("/", async (req: Request, res: Response) => {
-    await getAllCalls(req, res);
+    await getAllUsers(req, res);
 });
 
-// Define the route for creating a new call
+// Define the route for creating a new user
 router.post("/", async (req: Request, res: Response) => {
-    await createCall(req, res);
+    await createUser(req, res);
 });
 
 export default router;

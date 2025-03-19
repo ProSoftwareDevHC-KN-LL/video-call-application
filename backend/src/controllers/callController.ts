@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Call from "../models/call.model"
+import Call from "../models/call.model.js"
 
 export const getAllCalls = async (req: Request, res: Response) => {
     try {
