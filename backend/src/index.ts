@@ -1,10 +1,10 @@
 import "dotenv/config";
 import express, { Request, Response } from "express";
 import cors from "cors";
-import userRoutes from "./routes/userRoutes";
-import callRoutes from "./routes/callRoutes";
-import { setupWebSocket } from "./websocket/websocket";
-import connectDB from "./config/db";
+import userRoutes from "./routes/userRoutes.js";
+import callRoutes from "./routes/callRoutes.js";
+import { setupWebSocket } from "./websocket/websocket.js";
+import connectDB from "./config/db.js";
 import { AccessToken, WebhookReceiver } from "livekit-server-sdk";
 
 const SERVER_PORT = process.env.SERVER_PORT || 6080;

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import userSchema from '../validators/userValidator';
-import User from '../models/user.model';
+import userSchema from '../validators/userValidator.js';
+import User from '../models/user.model.js';
 
 // Get all users
 export const getAllUsers = async (req: Request, res: Response) => {
