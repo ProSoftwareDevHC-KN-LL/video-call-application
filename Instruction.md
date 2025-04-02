@@ -32,19 +32,19 @@ To install Openvidu:
 - in the git folder, run
 ```
 sudo sh openviud_install.sh
-\# Answer all the questions prompted
+# Answer all the questions prompted
 ```
 
 - The Openvidu version used currently have a small error in /opt/openvidu/docker-compose.yaml. To fix this problem, do the following:
 ```
 sudo su # Open sudo console
 nano /opt/openvidu/docker-compose.yaml # fix the error
-\# Go to the line containing MONGO_REPLICA_SET_KEY using Ctrl+W
-\# Remove the part :mandatory behind the key
-\# The finished version should look like this:
-\# ...
-\#         echo "${MONGO_REPLICA_SET_KEY}" > /data/mongo_data/replica.key &&
-\# ...
+# Go to the line containing MONGO_REPLICA_SET_KEY using Ctrl+W
+# Remove the part :mandatory behind the key
+# The finished version should look like this:
+# ...
+#         echo "${MONGO_REPLICA_SET_KEY}" > /data/mongo_data/replica.key &&
+# ...
 ```
 
 
