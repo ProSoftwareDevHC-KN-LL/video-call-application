@@ -11,6 +11,6 @@ The main developers of this application are:
 
 ## Instruction
 Follow the installation instruction provided in the repository, i.e.
-- Setup client and server: MoveDigi_call_application_server_setup.md
-- Setup OpenVidu server: OpenVidu_server_setup.md
+- Setup client and server: [MoveDigi_call_application_server_setup.md](MoveDigi_call_application_server_setup.md)
+- Setup OpenVidu server: [OpenVidu_server_setup.md](OpenVidu_server_setup.md)
 
